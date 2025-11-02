@@ -6,12 +6,10 @@ app.use(function(req,res,next){
   console.log("middleware working")
   next()
 })
+ app.set("view engnie","ejs")
 
-app.get('/', (req, res) => {
-  res.send('Hello World')
-})
 app.get ("/profile/:username",(req,res)=>{
- res.send(`hello ${req.params.username}`)
+ res.render("index.ejs")
 })
 
 app.listen(3000)
