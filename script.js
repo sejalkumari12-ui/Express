@@ -1,15 +1,22 @@
-import express from 'express'
+import express from 'express';
 
-const app = express()
+const app = express();
 
-app.use(function(req,res,next){
-  console.log("middleware working")
-  next()
-})
- app.set("view engnie","ejs")
+app.use(function(req, res, next) {
+  console.log("middleware working");
+  next();
+});
 
-app.get ("/profile/:username",(req,res)=>{
- res.render("index.ejs")
-})
+app.set("view engine", "ejs");
 
-app.listen(3000)
+app.get("/", (req, res) => {
+  res.render("index");
+});
+
+app.get("/about", (req, res) => {
+  res.render("about");
+});
+
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
+});

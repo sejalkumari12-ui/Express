@@ -1,11 +1,358 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sunset Media Studio</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css"
+  />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Loader Styles */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: all 0.8s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-content {
+      text-align: center;
+      animation: loaderFadeIn 1s ease-out;
+    }
+
+    @keyframes loaderFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .loader-logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #ff6600 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 2rem;
+      animation: logoGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoGlow {
+      0% {
+        filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.3));
+      }
+      100% {
+        filter: drop-shadow(0 0 20px rgba(255, 102, 0, 0.6));
+      }
+    }
+
+    .loader-spinner {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+
+    .loader-spinner::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 3px solid rgba(255, 102, 0, 0.1);
+      border-top: 3px solid #ff6600;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loader-spinner::after {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(255, 102, 0, 0.1);
+      border-top: 3px solid #e05400;
+      border-radius: 50%;
+      animation: spinReverse 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spinReverse {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .loader-text {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+      animation: textPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes textPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Header/Nav */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 102, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .header.scrolled {
+      background: rgba(10, 10, 10, 0.95);
+      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #ff6600 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      padding: 0.5rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #ff6600;
+    }
+
+    /* ✅ Hero Section Fullscreen */
+    .sunset-hero-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      width: 100vw;
+      height: 100vh;
+      margin-top: 70px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sunset-hero-fullscreen {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      top: 0;
+    }
+
+    .sunset-hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      z-index: 1;
+    }
+
+    .sunset-hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(255, 102, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.6) 100%
+      );
+    }
+
+    /* ✅ Centered Hero Content */
+    .sunset-hero-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 2s ease;
+      padding: 0 1rem;
+    }
+
+    .sunset-hero-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #ff6600 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+
+    .sunset-hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 2rem;
+    }
+
+    .sunset-hero-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, #ff6600, #e05400);
+      color: white;
+      font-weight: 600;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sunset-hero-btn:hover {
+      background: linear-gradient(135deg, #ff7e2b, #ff4500);
+      transform: scale(1.05);
+    }
+  </style>
 </head>
+
 <body>
-    
+  <div class="loader" id="loader">
+    <div class="loader-content">
+      <div class="loader-logo">Sunset Media</div>
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Loading Experience...</div>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="nav-container">
+      <a href="#" class="logo">Sunset Media</a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#services" class="nav-link">Services</a></li>
+          <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ✅ Fullscreen Hero Section -->
+  <div class="sunset-hero-container" id="home">
+    <div class="sunset-hero-fullscreen">
+      <div class="swiper sunset-hero-slider">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <video class="sunset-hero-video" autoplay muted loop playsinline>
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="swiper-slide">
+            <video class="sunset-hero-video" autoplay muted loop playsinline>
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="swiper-slide">
+            <video class="sunset-hero-video" autoplay muted loop playsinline>
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="sunset-hero-overlay"></div>
+      <div class="sunset-hero-content">
+        <h1 class="sunset-hero-title">We are Sunset Media Studio</h1>
+        <p class="sunset-hero-subtitle">
+          Crafting cinematic content that brings your ideas to life with stunning visuals and creative storytelling.
+        </p>
+        <a href="#portfolio" class="sunset-hero-btn">Explore Our Work</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const loader = document.getElementById("loader");
+      setTimeout(() => {
+        loader.classList.add("hidden");
+        setTimeout(() => {
+          loader.style.display = "none";
+        }, 800);
+      }, 3000);
+
+      new Swiper(".sunset-hero-slider", {
+        loop: true,
+        effect: "fade",
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        speed: 1200,
+      });
+    });
+  </script>
 </body>
 </html>
