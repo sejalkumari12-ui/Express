@@ -8,6 +8,7 @@ app.use(function(req, res, next) {
 });
 
 app.set("view engine", "ejs");
+app.use(express.static("./public" ))
 
 app.get("/", (req, res) => {
   res.render("index");
@@ -20,3 +21,4 @@ app.get("/about", (req, res) => {
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
+ 
